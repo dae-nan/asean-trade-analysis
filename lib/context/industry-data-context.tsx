@@ -295,9 +295,13 @@ export function IndustryDataProvider({ children }: { children: React.ReactNode }
                   riskLevel: row.riskLevel || 'Medium',
                   subIndustries: [],
                   country: row.country
-                };
+                }
+              } else {
+                // Accumulate export and import values for duplicate entries
+                industriesByID[row.id].exportValue += row.exportValue || 0
+                industriesByID[row.id].importValue += row.importValue || 0
               }
-              
+
               // If this row has product data, add it
               const productName = row.productName || row.subIndustryName;
               const productImpact = row.productImpact || row.subIndustryImpact;
