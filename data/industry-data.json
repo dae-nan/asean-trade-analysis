@@ -1,0 +1,108 @@
+[
+  {
+    "id": "energy",
+    "name": "Information Technology",
+    "exportValue": 3.46,
+    "importValue": 0,
+    "tariffImpact": 0,
+    "gdpImpact": 0,
+    "riskLevel": "Medium",
+    "subIndustries": [
+      {
+        "name": "Electronic Equipment",
+        "impact": 0,
+        "companies": [
+          "Petronas",
+          "PTT",
+          "Pertamina",
+          "PetroVietnam",
+          "Shell"
+        ]
+      }
+    ],
+    "country": "indonesia"
+  },
+  {
+    "id": "materials",
+    "name": "Materials",
+    "exportValue": 1.95,
+    "importValue": 0,
+    "tariffImpact": 0,
+    "gdpImpact": 0,
+    "riskLevel": "Medium",
+    "subIndustries": [
+      {
+        "name": "Palm oil�",
+        "impact": 0,
+        "companies": [
+          "Vale Indonesia",
+          "Antam",
+          "Krakatau Steel",
+          "Timah"
+        ]
+      },
+      {
+        "name": "Rubber",
+        "impact": 0,
+        "companies": [
+          "Vale Indonesia",
+          "Antam",
+          "Krakatau Steel",
+          "Timah"
+        ]
+      }
+    ],
+    "country": "indonesia"
+  },
+  {
+    "id": "consumer_discretionary",
+    "name": "Consumer Discretionary",
+    "exportValue": 1.92,
+    "importValue": 0,
+    "tariffImpact": 0,
+    "gdpImpact": 0,
+    "riskLevel": "Medium",
+    "subIndustries": [
+      {
+        "name": "Apparel",
+        "impact": 0,
+        "companies": [
+          "Panasonic Indonesia",
+          "Sharp Electronics",
+          "Polytron"
+        ]
+      },
+      {
+        "name": "Footware",
+        "impact": 0,
+        "companies": [
+          "Panasonic Indonesia",
+          "Sharp Electronics",
+          "Polytron"
+        ]
+      }
+    ],
+    "country": "indonesia"
+  },
+  {
+    "id": "communications",
+    "name": "Consumer Staples",
+    "exportValue": 1.09,
+    "importValue": 0,
+    "tariffImpact": 0,
+    "gdpImpact": 0,
+    "riskLevel": "Medium",
+    "subIndustries": [
+      {
+        "name": "Fish, crustaceans, mollusc",
+        "impact": 0,
+        "companies": [
+          "MNC Group",
+          "Emtek",
+          "Media Nusantara Citra"
+        ]
+      }
+    ],
+    "country": "indonesia"
+  }
+]

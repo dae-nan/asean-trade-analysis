@@ -3,17 +3,11 @@
 import { Bar, ComposedChart, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer, Line } from "recharts"
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-
-// Sample data for trade balance trends with imports as negative values
-const data = [
-  { year: 2019, exports: 320, imports: -150, balance: 170 },
-  { year: 2020, exports: 290, imports: -140, balance: 150 },
-  { year: 2021, exports: 330, imports: -155, balance: 175 },
-  { year: 2022, exports: 348, imports: -166, balance: 182 },
-  { year: 2023, exports: 363, imports: -169, balance: 194 },
-]
+import { useData } from "@/lib/context/data-context"
 
 export function TradeBalanceChart() {
+  const { tradeBalanceData } = useData()
+
   return (
     <ChartContainer
       config={{
@@ -30,15 +24,15 @@ export function TradeBalanceChart() {
           color: "hsl(var(--chart-3))",
         },
       }}
-      className="h-[300px]"
+      className="h-[300px] p-4"
     >
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
-          data={data}
+          data={tradeBalanceData}
           margin={{
             top: 20,
             right: 30,
-            left: 20,
+            left: 100,
             bottom: 5,
           }}
         >
@@ -48,7 +42,9 @@ export function TradeBalanceChart() {
             label={{
               value: "Billion USD",
               angle: -90,
-              position: "insideLeft",
+              position: "outside",
+              offset: 80,
+              style: { fontSize: '12px', fontWeight: 500 }
             }}
           />
           <ChartTooltip
@@ -56,7 +52,7 @@ export function TradeBalanceChart() {
               <ChartTooltipContent
                 formatter={(value, name) => {
                   if (name === "imports") {
-                    return [`${Math.abs(value)}`, "Imports from US (Billion USD)"]
+                    return [`${Math.abs(Number(value))}`, "Imports from US (Billion USD)"]
                   }
                   return [value, name]
                 }}
