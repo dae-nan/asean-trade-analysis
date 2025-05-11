@@ -365,7 +365,9 @@ export function IndustryDataProvider({ children }: { children: React.ReactNode }
     content += "industrials,Industrials,92.6,31.8,-8.7,-0.6,Medium,malaysia,Transportation,-6.4,\"AirAsia, Malaysia Airlines, MISC Berhad, Westports\"\n"
     
     // Consumer Discretionary sector
-    content += "consumer_discretionary,Consumer Discretionary,67.4,58.2,-5.9,-0.7,Medium,thailand,Automobiles & Components,-8.3,\"Toyota Motor Thailand, Honda Thailand, Isuzu\"\n"
+    content += "consumer_discretionary,Consumer Discretionary,67.4,58.2,-5.9,-0.7,Medium,thailand,Aerospace & Defense,-7.2,\"ST Engineering, SIA Engineering, SATS Aerospace\"\n"
+    // Apparel products for Indonesia with updated top companies
+    content += "consumer_discretionary,Consumer Discretionary,1.92,0,0,0,Medium,indonesia,Apparel,0,\"PT Sritex Tbk, PT Pan Brothers Tbk, PT Eratex Djaja Tbk\"\n"
     content += "consumer_discretionary,Consumer Discretionary,67.4,58.2,-5.9,-0.7,Medium,indonesia,Consumer Durables,-4.7,\"Panasonic Indonesia, Sharp Electronics, Polytron\"\n"
     content += "consumer_discretionary,Consumer Discretionary,67.4,58.2,-5.9,-0.7,Medium,vietnam,Textiles & Apparel,-7.2,\"TNG Investment, Vinatex, Century Synthetic Fiber\"\n"
     

@@ -105,6 +105,22 @@ const industries = [
 export function IndustryImpactTable() {
   const [expandedIndustry, setExpandedIndustry] = useState<string | null>(null)
   const { industryData } = useIndustryData()
+  // Sorting state for export value
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null)
+  const sortedData = React.useMemo(() => {
+    const dataCopy = [...industryData]
+    if (sortDirection === 'asc') {
+      dataCopy.sort((a, b) => a.exportValue - b.exportValue)
+    } else if (sortDirection === 'desc') {
+      dataCopy.sort((a, b) => b.exportValue - a.exportValue)
+    }
+    return dataCopy
+  }, [industryData, sortDirection])
+  const toggleSort = () => {
+    if (sortDirection === 'asc') setSortDirection('desc')
+    else if (sortDirection === 'desc') setSortDirection(null)
+    else setSortDirection('asc')
+  }
 
   const toggleIndustry = (id: string) => {
     setExpandedIndustry(expandedIndustry === id ? null : id)
@@ -141,7 +157,12 @@ export function IndustryImpactTable() {
             <TableRow>
               <TableHead className="w-[50px]"></TableHead>
               <TableHead>Industry</TableHead>
-              <TableHead className="text-right">Export Value ($B)</TableHead>
+              <TableHead className="text-right cursor-pointer" onClick={toggleSort}>
+                <div className="flex items-center justify-end">
+                  Export Value ($B)
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+              </TableHead>
               <TableHead className="text-right">Import Value ($B)</TableHead>
               <TableHead className="text-right">
                 <div className="flex items-center justify-end">
@@ -164,7 +185,7 @@ export function IndustryImpactTable() {
                 </TableCell>
               </TableRow>
             ) : (
-              industryData.map((industry: IndustryData) => (
+              sortedData.map((industry: IndustryData) => (
                 <React.Fragment key={industry.id}>
                   <TableRow>
                     <TableCell>

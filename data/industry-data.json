@@ -12,11 +12,7 @@
         "name": "Electronic Equipment",
         "impact": 0,
         "companies": [
-          "Petronas",
-          "PTT",
-          "Pertamina",
-          "PetroVietnam",
-          "Shell"
+          "PT Sat Nusapersada Tbk"
         ]
       }
     ],
@@ -25,7 +21,7 @@
   {
     "id": "materials",
     "name": "Materials",
-    "exportValue": 1.95,
+    "exportValue": 3.59,
     "importValue": 0,
     "tariffImpact": 0,
     "gdpImpact": 0,
@@ -35,20 +31,17 @@
         "name": "Palm oil�",
         "impact": 0,
         "companies": [
-          "Vale Indonesia",
-          "Antam",
-          "Krakatau Steel",
-          "Timah"
+          "PT Astra Agro Lestari",
+          "PT Sinar Mas Agro Resources and Technology",
+          "PT Wilmar Nabati Indonesia"
         ]
       },
       {
         "name": "Rubber",
         "impact": 0,
         "companies": [
-          "Vale Indonesia",
-          "Antam",
-          "Krakatau Steel",
-          "Timah"
+          "PT Gajah Tunggal Tbk",
+          "Bakrie Sumatera Plantations"
         ]
       }
     ],
@@ -57,7 +50,7 @@
   {
     "id": "consumer_discretionary",
     "name": "Consumer Discretionary",
-    "exportValue": 1.92,
+    "exportValue": 6.28,
     "importValue": 0,
     "tariffImpact": 0,
     "gdpImpact": 0,
@@ -67,18 +60,19 @@
         "name": "Apparel",
         "impact": 0,
         "companies": [
-          "Panasonic Indonesia",
-          "Sharp Electronics",
-          "Polytron"
+          "PT Sritex Tbk",
+          "PT Pan Brothers Tbk",
+          "PT Eratex Djaja Tbk"
         ]
       },
       {
         "name": "Footware",
         "impact": 0,
         "companies": [
-          "Panasonic Indonesia",
-          "Sharp Electronics",
-          "Polytron"
+          "PT Pratama Abadi Industri",
+          "PT Pengtay Indonesia",
+          "PT Victory Chingluh Indonesia",
+          "PT Shoetown Ligung Indonesia"
         ]
       }
     ],
@@ -97,9 +91,9 @@
         "name": "Fish, crustaceans, mollusc",
         "impact": 0,
         "companies": [
-          "MNC Group",
-          "Emtek",
-          "Media Nusantara Citra"
+          "PT Jaya Samudera Sejahtera",
+          "GLP Seafood",
+          "Resky Bahari"
         ]
       }
     ],

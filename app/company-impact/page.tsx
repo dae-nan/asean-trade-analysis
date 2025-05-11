@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CompanyImpactChart } from "@/components/company-impact-chart"
 import { CompanyDetailTable } from "@/components/company-detail-table"
+import { CompanyDataUploader } from "@/components/company-data-uploader"
+import { useCompanyData } from "@/lib/context/company-data-context"
 
 // Sample data for company impact
 const industryData = {
@@ -158,8 +160,9 @@ export default function CompanyImpactPage() {
   const searchParams = useSearchParams()
   const industry = searchParams.get("industry") || "tech"
   const subIndustryIndex = Number.parseInt(searchParams.get("subIndustry") || "0")
-
-  const industryInfo = industryData[industry as keyof typeof industryData]
+  
+  const { companyData } = useCompanyData()
+  const industryInfo = companyData[industry]
   const subIndustry = industryInfo?.subIndustries[subIndustryIndex]
 
   if (!industryInfo || !subIndustry) {
@@ -184,25 +187,28 @@ export default function CompanyImpactPage() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="flex items-center">
-          <Link href="/">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back</span>
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-semibold ml-2">{subIndustry.name} Companies</h1>
-            <p className="text-muted-foreground ml-2">
-              Impact analysis for top companies in {industryInfo.name} - {subIndustry.name}
-            </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/">
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="h-4 w-4" />
+                <span className="sr-only">Back</span>
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-2xl font-semibold ml-2">{subIndustry.name} Companies</h1>
+              <p className="text-muted-foreground ml-2">
+                Impact analysis for top companies in {industryInfo.name} - {subIndustry.name}
+              </p>
+            </div>
           </div>
+          <CompanyDataUploader />
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle>Tariff Impact Comparison</CardTitle>
-            <CardDescription>Projected impact of US tariffs on top 5 companies in {subIndustry.name}</CardDescription>
+            <CardDescription>Projected impact of US tariffs on top companies in {subIndustry.name}</CardDescription>
           </CardHeader>
           <CardContent>
             <CompanyImpactChart companies={subIndustry.companies} />
