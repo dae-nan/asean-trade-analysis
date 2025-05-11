@@ -3,10 +3,14 @@
 import { useState } from "react"
 import { ArrowUpDown, ChevronDown, ChevronRight } from 'lucide-react'
 import Link from "next/link"
+import React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Progress } from "@/components/ui/progress"
+import { IndustryDataUploader } from "./industry-data-uploader"
+import { IndustryExport } from "./industry-export"
+import { useIndustryData, IndustryData, SubIndustry } from "@/lib/context/industry-data-context"
 
 // Sample industry impact data
 const industries = [
@@ -100,6 +104,7 @@ const industries = [
 
 export function IndustryImpactTable() {
   const [expandedIndustry, setExpandedIndustry] = useState<string | null>(null)
+  const { industryData } = useIndustryData()
 
   const toggleIndustry = (id: string) => {
     setExpandedIndustry(expandedIndustry === id ? null : id)
@@ -127,9 +132,8 @@ export function IndustryImpactTable() {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Button variant="outline" className="ml-auto">
-          Export Data
-        </Button>
+        <IndustryDataUploader />
+        <IndustryExport />
       </div>
       <div className="rounded-md border">
         <Table>
@@ -150,78 +154,89 @@ export function IndustryImpactTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {industries.map((industry) => (
-              <>
-                <TableRow key={industry.id}>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0"
-                      onClick={() => toggleIndustry(industry.id)}
-                    >
-                      {expandedIndustry === industry.id ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      )}
-                      <span className="sr-only">Toggle</span>
-                    </Button>
-                  </TableCell>
-                  <TableCell className="font-medium">{industry.name}</TableCell>
-                  <TableCell className="text-right">{industry.exportValue}</TableCell>
-                  <TableCell className="text-right">{industry.importValue}</TableCell>
-                  <TableCell className="text-right text-red-500">{industry.tariffImpact}%</TableCell>
-                  <TableCell className="text-right text-red-500">{industry.gdpImpact}%</TableCell>
-                  <TableCell className={`text-right ${getRiskColor(industry.riskLevel)}`}>
-                    {industry.riskLevel}
-                  </TableCell>
-                </TableRow>
-                {expandedIndustry === industry.id && (
-                  <TableRow className="bg-muted/50">
-                    <TableCell colSpan={7} className="p-0">
-                      <div className="p-4">
-                        <h4 className="mb-2 font-semibold">Sub-Industries</h4>
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Sub-Industry</TableHead>
-                              <TableHead>Impact (%)</TableHead>
-                              <TableHead>Top Companies</TableHead>
-                              <TableHead className="text-right">Actions</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {industry.subIndustries.map((subIndustry, index) => (
-                              <TableRow key={index}>
-                                <TableCell>{subIndustry.name}</TableCell>
-                                <TableCell>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-red-500">{subIndustry.impact}%</span>
-                                    <Progress
-                                      value={Math.abs(subIndustry.impact) * 5}
-                                      className={`h-2 w-[100px] ${getImpactColor(subIndustry.impact)}`}
-                                    />
-                                  </div>
-                                </TableCell>
-                                <TableCell>{subIndustry.companies.join(", ")}</TableCell>
-                                <TableCell className="text-right">
-                                  <Link href={`/company-impact?industry=${industry.id}&subIndustry=${index}`}>
-                                    <Button variant="outline" size="sm">
-                                      View Companies
-                                    </Button>
-                                  </Link>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
+            {industryData.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center py-8">
+                  <div className="flex flex-col items-center space-y-3">
+                    <p className="text-muted-foreground">No industry data available</p>
+                    <p className="text-sm text-muted-foreground">Click "Upload Industry Data" to add data</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              industryData.map((industry: IndustryData) => (
+                <React.Fragment key={industry.id}>
+                  <TableRow>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                        onClick={() => toggleIndustry(industry.id)}
+                      >
+                        {expandedIndustry === industry.id ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4" />
+                        )}
+                        <span className="sr-only">Toggle</span>
+                      </Button>
+                    </TableCell>
+                    <TableCell className="font-medium">{industry.name}</TableCell>
+                    <TableCell className="text-right">{industry.exportValue}</TableCell>
+                    <TableCell className="text-right">{industry.importValue}</TableCell>
+                    <TableCell className="text-right text-red-500">{industry.tariffImpact}%</TableCell>
+                    <TableCell className="text-right text-red-500">{industry.gdpImpact}%</TableCell>
+                    <TableCell className={`text-right ${getRiskColor(industry.riskLevel)}`}>
+                      {industry.riskLevel}
                     </TableCell>
                   </TableRow>
-                )}
-              </>
-            ))}
+                  {expandedIndustry === industry.id && (
+                    <TableRow className="bg-muted/50">
+                      <TableCell colSpan={7} className="p-0">
+                        <div className="p-4">
+                          <h4 className="mb-2 font-semibold">Key Export Products</h4>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Product</TableHead>
+                                <TableHead>Impact (%)</TableHead>
+                                <TableHead>Top Companies</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {industry.subIndustries.map((subIndustry: SubIndustry, index: number) => (
+                                <TableRow key={index}>
+                                  <TableCell>{subIndustry.name}</TableCell>
+                                  <TableCell>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-red-500">{subIndustry.impact}%</span>
+                                      <Progress
+                                        value={Math.abs(subIndustry.impact) * 5}
+                                        className={`h-2 w-[100px] ${getImpactColor(subIndustry.impact)}`}
+                                      />
+                                    </div>
+                                  </TableCell>
+                                  <TableCell>{subIndustry.companies.join(", ")}</TableCell>
+                                  <TableCell className="text-right">
+                                    <Link href={`/company-impact?industry=${industry.id}&subIndustry=${index}`}>
+                                      <Button variant="outline" size="sm">
+                                        View Companies
+                                      </Button>
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

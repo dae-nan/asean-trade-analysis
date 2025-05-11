@@ -1,0 +1,169 @@
+{
+  "all": {
+    "gdpGrowth": [
+      {
+        "year": 2020,
+        "consumption": 0.5,
+        "investment": 0.3,
+        "government": 1.1,
+        "netExports": 0.2,
+        "gdpGrowth": 2.1,
+        "tradeVolume": 410
+      },
+      {
+        "year": 2021,
+        "consumption": 1.8,
+        "investment": 1,
+        "government": 0.7,
+        "netExports": 0.4,
+        "gdpGrowth": 3.9,
+        "tradeVolume": 450
+      },
+      {
+        "year": 2022,
+        "consumption": 2.7,
+        "investment": 1.5,
+        "government": 0.5,
+        "netExports": 0.5,
+        "gdpGrowth": 5.2,
+        "tradeVolume": 510
+      },
+      {
+        "year": 2023,
+        "consumption": 2.5,
+        "investment": 1.3,
+        "government": 0.4,
+        "netExports": 0.5,
+        "gdpGrowth": 4.7,
+        "tradeVolume": 532
+      },
+      {
+        "year": 2024,
+        "consumption": 2.6,
+        "investment": 1.4,
+        "government": 0.5,
+        "netExports": 0.6,
+        "gdpGrowth": 5.1,
+        "tradeVolume": 550
+      }
+    ],
+    "tradeBalance": [
+      {
+        "year": 2020,
+        "exports": 290,
+        "imports": -140,
+        "balance": 150
+      },
+      {
+        "year": 2021,
+        "exports": 330,
+        "imports": -155,
+        "balance": 175
+      },
+      {
+        "year": 2022,
+        "exports": 348,
+        "imports": -166,
+        "balance": 182
+      },
+      {
+        "year": 2023,
+        "exports": 363,
+        "imports": -169,
+        "balance": 194
+      },
+      {
+        "year": 2024,
+        "exports": 375,
+        "imports": -175,
+        "balance": 200
+      }
+    ]
+  },
+  "indonesia": {
+    "gdpGrowth": [
+      {
+        "country": "indonesia",
+        "year": 2020,
+        "consumption": 760,
+        "investment": 450,
+        "government": 170,
+        "netExports": -20,
+        "tradeVolume": 304
+      },
+      {
+        "country": "indonesia",
+        "year": 2021,
+        "consumption": 790,
+        "investment": 470,
+        "government": 165,
+        "netExports": 10,
+        "tradeVolume": 427
+      },
+      {
+        "country": "indonesia",
+        "year": 2022,
+        "consumption": 830,
+        "investment": 500,
+        "government": 170,
+        "netExports": 20,
+        "tradeVolume": 529
+      },
+      {
+        "country": "indonesia",
+        "year": 2023,
+        "consumption": 870,
+        "investment": 530,
+        "government": 175,
+        "netExports": 30,
+        "tradeVolume": 480
+      },
+      {
+        "country": "indonesia",
+        "year": 2024,
+        "consumption": 910,
+        "investment": 560,
+        "government": 180,
+        "netExports": 40,
+        "tradeVolume": 520
+      }
+    ],
+    "tradeBalance": [
+      {
+        "country": "indonesia",
+        "year": 2020,
+        "exports": 20.1,
+        "imports": -8.2,
+        "balance": 11.9
+      },
+      {
+        "country": "indonesia",
+        "year": 2021,
+        "exports": 23.8,
+        "imports": -9.5,
+        "balance": 14.3
+      },
+      {
+        "country": "indonesia",
+        "year": 2022,
+        "exports": 27.2,
+        "imports": -10.7,
+        "balance": 16.5
+      },
+      {
+        "country": "indonesia",
+        "year": 2023,
+        "exports": 27.9,
+        "imports": -11,
+        "balance": 16.9
+      },
+      {
+        "country": "indonesia",
+        "year": 2024,
+        "exports": 28.1,
+        "imports": -10.2,
+        "balance": 17.9
+      }
+    ]
+  }
+}
