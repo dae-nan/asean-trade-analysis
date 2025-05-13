@@ -233,6 +233,16 @@ export function CompanyDataProvider({ children }: { children: React.ReactNode })
         console.log("Attempting to load company data...");
         setIsLoading(true);
         
+        // Check if we're in Vercel production environment
+        const isVercelProduction = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app');
+        if (isVercelProduction) {
+          console.log("Detected Vercel production environment - using default company data");
+          setCompanyData(defaultCompanyData);
+          setLastUpdated(new Date().toISOString());
+          setIsLoading(false);
+          return;
+        }
+        
         // First try server data (for persistence across server restarts)
         const serverData = await loadDataFromServer();
         if (serverData && typeof serverData === 'object' && Object.keys(serverData).length > 0) {

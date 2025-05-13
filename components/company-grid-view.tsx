@@ -50,11 +50,16 @@ export function CompanyGridView({ className }: CompanyGridViewProps) {
       
       return subIndustry.companies
         .filter(company => {
-          // Only include this company if we have corresponding industry data
-          // or if the industryCompanies map is empty (no industry data uploaded yet)
+          // Only include this company if:
+          // 1. We have no industry data (show all companies) OR
+          // 2. We have industry data that matches this company OR
+          // 3. We're in a production environment (detected via hostname)
+          const isProduction = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app');
+          
           return industryCompanies.size === 0 || 
                  (industryCompanies.has(key) && 
-                  industryCompanies.get(key)?.has(company.name.toLowerCase()));
+                  industryCompanies.get(key)?.has(company.name.toLowerCase())) ||
+                 isProduction;
         })
         .map(company => ({
           id: `${industry.id}-${subIndustry.name}-${company.name}`,
