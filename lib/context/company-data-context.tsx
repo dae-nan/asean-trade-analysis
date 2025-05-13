@@ -10,7 +10,7 @@ export interface Company {
   impact: number
   marketCap: number
   revenue: number
-  employeeCount: number
+  freeCash: number
   mainMarkets: string[]
 }
 
@@ -39,7 +39,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -21.3,
             marketCap: 512.4,
             revenue: 73.6,
-            employeeCount: 73400,
+            freeCash: 73400,
             mainMarkets: ["Taiwan", "China", "US"],
           },
           {
@@ -47,7 +47,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -18.7,
             marketCap: 21.8,
             revenue: 8.1,
-            employeeCount: 19500,
+            freeCash: 19500,
             mainMarkets: ["Taiwan", "China", "Singapore"],
           },
           {
@@ -55,7 +55,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -16.2,
             marketCap: 32.5,
             revenue: 7.4,
-            employeeCount: 15000,
+            freeCash: 15000,
             mainMarkets: ["US", "Singapore", "Germany"],
           },
           {
@@ -63,7 +63,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -14.8,
             marketCap: 78.3,
             revenue: 23.4,
-            employeeCount: 48000,
+            freeCash: 48000,
             mainMarkets: ["US", "Malaysia", "Singapore"],
           },
           {
@@ -71,7 +71,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -12.5,
             marketCap: 156.7,
             revenue: 54.2,
-            employeeCount: 121100,
+            freeCash: 121100,
             mainMarkets: ["US", "Vietnam", "Malaysia"],
           },
         ],
@@ -84,7 +84,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -11.4,
             marketCap: 342.1,
             revenue: 197.6,
-            employeeCount: 267937,
+            freeCash: 267937,
             mainMarkets: ["South Korea", "Vietnam", "Indonesia"],
           },
           {
@@ -92,7 +92,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -9.8,
             marketCap: 21.3,
             revenue: 63.2,
-            employeeCount: 74000,
+            freeCash: 74000,
             mainMarkets: ["South Korea", "Vietnam", "Indonesia"],
           },
           {
@@ -100,7 +100,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -8.7,
             marketCap: 124.5,
             revenue: 88.3,
-            employeeCount: 109700,
+            freeCash: 109700,
             mainMarkets: ["Japan", "Malaysia", "Thailand"],
           },
           {
@@ -108,7 +108,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -10.2,
             marketCap: 48.7,
             revenue: 214.6,
-            employeeCount: 878429,
+            freeCash: 878429,
             mainMarkets: ["Taiwan", "China", "Vietnam"],
           },
           {
@@ -116,7 +116,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -7.9,
             marketCap: 2.4,
             revenue: 8.1,
-            employeeCount: 7000,
+            freeCash: 7000,
             mainMarkets: ["Taiwan", "Malaysia", "Philippines"],
           },
         ],
@@ -129,7 +129,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -4.2,
             marketCap: 2340.5,
             revenue: 211.9,
-            employeeCount: 221000,
+            freeCash: 221000,
             mainMarkets: ["US", "Singapore", "India"],
           },
           {
@@ -137,7 +137,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -3.8,
             marketCap: 310.2,
             revenue: 49.9,
-            employeeCount: 143000,
+            freeCash: 143000,
             mainMarkets: ["US", "Singapore", "Malaysia"],
           },
           {
@@ -145,7 +145,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -3.5,
             marketCap: 167.8,
             revenue: 33.2,
-            employeeCount: 107415,
+            freeCash: 107415,
             mainMarkets: ["Germany", "Singapore", "Malaysia"],
           },
           {
@@ -153,7 +153,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -4.3,
             marketCap: 254.3,
             revenue: 31.4,
-            employeeCount: 73541,
+            freeCash: 73541,
             mainMarkets: ["US", "Singapore", "Philippines"],
           },
           {
@@ -161,7 +161,7 @@ const defaultCompanyData: Record<string, IndustryCompanyData> = {
             impact: -4.7,
             marketCap: 245.8,
             revenue: 17.6,
-            employeeCount: 29239,
+            freeCash: 29239,
             mainMarkets: ["US", "India", "Singapore"],
           },
         ],
@@ -190,9 +190,15 @@ async function saveDataToServer(data: Record<string, IndustryCompanyData>): Prom
 
 async function loadDataFromServer(): Promise<Record<string, IndustryCompanyData> | null> {
   try {
+    console.log("Attempting to load company data from server API");
     const response = await fetch('/api/load-company-data');
-    if (!response.ok) return null;
-    return await response.json();
+    if (!response.ok) {
+      console.log("Server response not OK, status:", response.status);
+      return null;
+    }
+    const data = await response.json();
+    console.log("Loaded company data from server:", Object.keys(data).length > 0 ? "Data found" : "Empty object");
+    return data;
   } catch (error) {
     console.error('Failed to load company data from server:', error);
     return null;
@@ -229,8 +235,8 @@ export function CompanyDataProvider({ children }: { children: React.ReactNode })
         
         // First try server data (for persistence across server restarts)
         const serverData = await loadDataFromServer();
-        if (serverData && typeof serverData === 'object') {
-          console.log(`Loaded company data from server`);
+        if (serverData && typeof serverData === 'object' && Object.keys(serverData).length > 0) {
+          console.log(`Loaded company data from server with ${Object.keys(serverData).length} industries`);
           setCompanyData(serverData);
           setLastUpdated(new Date().toISOString());
           setIsLoading(false);
@@ -243,8 +249,8 @@ export function CompanyDataProvider({ children }: { children: React.ReactNode })
           if (savedData) {
             try {
               const parsedData = JSON.parse(savedData);
-              if (parsedData && typeof parsedData === 'object') {
-                console.log(`Loaded company data from localStorage`);
+              if (parsedData && typeof parsedData === 'object' && Object.keys(parsedData).length > 0) {
+                console.log(`Loaded company data from localStorage with ${Object.keys(parsedData).length} industries`);
                 setCompanyData(parsedData);
                 setLastUpdated(new Date().toISOString());
                 
@@ -261,11 +267,23 @@ export function CompanyDataProvider({ children }: { children: React.ReactNode })
         }
         
         // No data found, use default data
-        console.log("No company data found, using default data");
+        console.log("No company data found, using default data with", Object.keys(defaultCompanyData).length, "industries");
         setCompanyData(defaultCompanyData);
+        setLastUpdated(new Date().toISOString());
+        
+        // Try to save default data to server for future use
+        try {
+          await saveDataToServer(defaultCompanyData);
+          console.log("Saved default company data to server");
+        } catch (e) {
+          console.warn("Could not save default company data to server:", e);
+        }
+        
         setIsLoading(false);
       } catch (error) {
         console.error('Error loading initial company data:', error);
+        setCompanyData(defaultCompanyData); // Fallback to default data on error
+        setLastUpdated(new Date().toISOString());
         setIsLoading(false);
       }
     }
@@ -314,22 +332,37 @@ export function CompanyDataProvider({ children }: { children: React.ReactNode })
               return;
             }
             
-            // Process valid rows
-            const validRows = parsedData.filter(row => row.industryId && row.subIndustryName && row.companyName);
+            // Process valid rows - only require industryId and companyName
+            const validRows = parsedData.filter(row => row.industryId && row.companyName);
             console.log(`Found ${validRows.length} valid rows out of ${parsedData.length} total rows`);
             
             if (validRows.length === 0) {
-              reject(new Error("CSV must contain at least industryId, subIndustryName, and companyName columns"));
+              reject(new Error("CSV must contain at least industryId and companyName columns"));
               return;
             }
             
             // Group by industry ID and sub-industry
             const newCompanyData: Record<string, IndustryCompanyData> = { ...companyData };
             
+            // Create a set to track company names we've added to avoid duplicates
+            const processedCompanies = new Set<string>();
+            
             validRows.forEach((row: any) => {
               const industryId = row.industryId;
               const industryName = row.industryName || industryId.charAt(0).toUpperCase() + industryId.slice(1);
-              const subIndustryName = row.subIndustryName;
+              // Use subIndustryName if provided, otherwise default to industry name
+              const subIndustryName = row.subIndustryName || industryName;
+              const companyName = row.companyName;
+              
+              // Skip if we've already processed this company
+              const companyKey = companyName.toLowerCase();
+              if (processedCompanies.has(companyKey)) {
+                console.log(`Skipping duplicate company: ${companyName}`);
+                return;
+              }
+              
+              // Mark this company as processed
+              processedCompanies.add(companyKey);
               
               // Create industry if it doesn't exist
               if (!newCompanyData[industryId]) {
@@ -356,15 +389,29 @@ export function CompanyDataProvider({ children }: { children: React.ReactNode })
               // Parse mainMarkets as comma-separated string
               const mainMarkets = row.mainMarkets ? row.mainMarkets.split(',').map((m: string) => m.trim()) : [];
               
-              // Add company to sub-industry
-              subIndustry.companies.push({
-                name: row.companyName,
+              // Check if company already exists in this sub-industry
+              const existingCompanyIndex = subIndustry.companies.findIndex(
+                company => company.name.toLowerCase() === companyName.toLowerCase()
+              );
+              
+              // Create company data object with freeCash instead of employeeCount
+              const companyData: Company = {
+                name: companyName,
                 impact: row.impact || 0,
                 marketCap: row.marketCap || 0,
                 revenue: row.revenue || 0,
-                employeeCount: row.employeeCount || 0,
+                freeCash: row.freeCash || 0,
                 mainMarkets: mainMarkets
-              });
+              };
+              
+              if (existingCompanyIndex >= 0) {
+                // Update existing company instead of adding a duplicate
+                console.log(`Updating existing company: ${companyName} in ${industryName} - ${subIndustryName}`);
+                subIndustry.companies[existingCompanyIndex] = companyData;
+              } else {
+                // Add new company
+                subIndustry.companies.push(companyData);
+              }
             });
             
             // Update state with the new data
@@ -395,48 +442,86 @@ export function CompanyDataProvider({ children }: { children: React.ReactNode })
 
   // Function to download template CSV file
   const downloadCompanyTemplateCSV = () => {
-    // CSV header
-    let content = "industryId,industryName,subIndustryName,companyName,impact,marketCap,revenue,employeeCount,mainMarkets\n"
+    // CSV header - removed subIndustryName which isn't used in display
+    let content = "industryId,industryName,companyName,impact,marketCap,revenue,freeCash,mainMarkets\n";
     
-    // Tech industry examples
-    content += "tech,Technology,Semiconductors,TSMC,-21.3,512.4,73.6,73400,\"Taiwan, China, US\"\n"
-    content += "tech,Technology,Semiconductors,UMC,-18.7,21.8,8.1,19500,\"Taiwan, China, Singapore\"\n"
-    content += "tech,Technology,Semiconductors,GlobalFoundries,-16.2,32.5,7.4,15000,\"US, Singapore, Germany\"\n"
-    content += "tech,Technology,Consumer Electronics,Samsung,-11.4,342.1,197.6,267937,\"South Korea, Vietnam, Indonesia\"\n"
-    content += "tech,Technology,Consumer Electronics,Sony,-8.7,124.5,88.3,109700,\"Japan, Malaysia, Thailand\"\n"
-    content += "tech,Technology,Software,Microsoft,-4.2,2340.5,211.9,221000,\"US, Singapore, India\"\n"
-    content += "tech,Technology,Software,Oracle,-3.8,310.2,49.9,143000,\"US, Singapore, Malaysia\"\n"
-    
-    // Manufacturing industry examples
-    content += "manufacturing,Manufacturing,Automotive,Toyota,-8.4,238.5,287.6,370870,\"Japan, Thailand, Indonesia\"\n"
-    content += "manufacturing,Manufacturing,Automotive,Honda,-7.9,54.3,143.1,219722,\"Japan, Malaysia, Thailand\"\n"
-    content += "manufacturing,Manufacturing,Machinery,Caterpillar,-9.3,127.8,54.7,107700,\"US, Singapore, Thailand\"\n"
-    content += "manufacturing,Manufacturing,Textiles,Uniqlo,-7.1,86.2,21.3,56000,\"Japan, Vietnam, Indonesia\"\n"
-    
-    // Energy industry examples
-    content += "energy,Energy,Oil & Gas,Petronas,-3.6,95.7,62.8,48000,\"Malaysia, Indonesia, Vietnam\"\n"
-    content += "energy,Energy,Renewable Energy,First Solar,-4.8,19.5,3.1,6400,\"US, Malaysia, Vietnam\"\n"
-    
-    // Apparel examples with Indonesian companies
-    content += "consumer_discretionary,Consumer Discretionary,Apparel,PT Sritex Tbk,-6.2,0.9,0.85,50000,\"Indonesia, USA, EU\"\n"
-    content += "consumer_discretionary,Consumer Discretionary,Apparel,PT Pan Brothers Tbk,-5.8,0.7,0.65,37000,\"Indonesia, Japan, USA\"\n"
-    content += "consumer_discretionary,Consumer Discretionary,Apparel,PT Eratex Djaja Tbk,-4.9,0.1,0.12,8000,\"Indonesia, USA, Europe\"\n"
+    // Use existing company data if available, otherwise use minimal examples
+    if (Object.keys(companyData).length > 0) {
+      // Collect all companies from existing data
+      const allCompanies: Array<{
+        industryId: string;
+        industryName: string;
+        companyName: string;
+        impact: number;
+        marketCap: number;
+        revenue: number;
+        freeCash: number;
+        mainMarkets: string[];
+      }> = [];
+      
+      Object.entries(companyData).forEach(([industryId, industry]) => {
+        industry.subIndustries.forEach(subIndustry => {
+          subIndustry.companies.forEach(company => {
+            allCompanies.push({
+              industryId,
+              industryName: industry.name,
+              companyName: company.name,
+              impact: company.impact,
+              marketCap: company.marketCap,
+              revenue: company.revenue,
+              freeCash: company.freeCash,
+              mainMarkets: company.mainMarkets
+            });
+          });
+        });
+      });
+      
+      // Deduplicate companies by name (case insensitive)
+      const companyMap = new Map();
+      allCompanies.forEach(company => {
+        companyMap.set(company.companyName.toLowerCase(), company);
+      });
+      
+      // Convert back to array and sort
+      const dedupedCompanies = Array.from(companyMap.values());
+      
+      // Sort by industry and company name for readability
+      dedupedCompanies.sort((a, b) => {
+        if (a.industryName !== b.industryName) {
+          return a.industryName.localeCompare(b.industryName);
+        }
+        return a.companyName.localeCompare(b.companyName);
+      });
+      
+      // Add companies to CSV content
+      dedupedCompanies.forEach(company => {
+        const mainMarketsStr = company.mainMarkets.length > 0 
+          ? `"${company.mainMarkets.join(', ')}"` 
+          : "";
+          
+        content += `${company.industryId},${company.industryName},${company.companyName},${company.impact},${company.marketCap},${company.revenue},${company.freeCash},${mainMarketsStr}\n`;
+      });
+    } else {
+      // Provide a minimal example if no data exists
+      content += "tech,Technology,Sample Tech Company,-5.2,120.5,45.7,12000,\"US, Singapore, Taiwan\"\n";
+      content += "consumer_discretionary,Consumer Discretionary,Sample Apparel Company,-4.8,0.9,0.7,35000,\"Indonesia, Japan, US\"\n";
+    }
     
     // Create blob and trigger download
-    const blob = new Blob([content], { type: 'text/csv' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = "Company_Impact_Template.csv"
-    document.body.appendChild(a)
-    a.click()
+    const blob = new Blob([content], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "Company_Impact_Template.csv";
+    document.body.appendChild(a);
+    a.click();
     
     // Clean up
     setTimeout(() => {
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-    }, 100)
-  }
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+  };
 
   return (
     <CompanyDataContext.Provider

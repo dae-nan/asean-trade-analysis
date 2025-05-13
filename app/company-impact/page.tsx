@@ -28,6 +28,7 @@ export default function CompanyImpactPage() {
     console.log("Sub-industry index:", subIndustryIndex)
     console.log("Industry info exists:", !!industryInfo)
     console.log("Sub-industry exists:", !!subIndustry)
+    console.log("All company data:", companyData)
     
     // Show fallback button if CompanyDataUploader doesn't appear
     const timer = setTimeout(() => {
@@ -35,7 +36,7 @@ export default function CompanyImpactPage() {
     }, 1000)
     
     return () => clearTimeout(timer)
-  }, [industry, subIndustryIndex, industryInfo, subIndustry])
+  }, [industry, subIndustryIndex, industryInfo, subIndustry, companyData])
 
   if (!industryInfo || !subIndustry) {
     return (

@@ -10,6 +10,20 @@ export async function GET() {
   try {
     console.log(`[API] Received request to load company data from ${COMPANY_DATA_FILE}`);
     
+    // Check if we're running in Vercel production environment
+    const isVercelProduction = process.env.VERCEL_ENV === 'production';
+    if (isVercelProduction) {
+      console.log('[API] Running in Vercel production - file persistence is not reliable');
+      
+      // For Vercel production, we'll use a default empty object
+      // Client-side will load default data
+      return NextResponse.json({}, {
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+        }
+      });
+    }
+    
     // Check if the data file exists
     try {
       await fs.access(COMPANY_DATA_FILE);
@@ -30,7 +44,7 @@ export async function GET() {
     try {
       // Parse the JSON data
       const data = JSON.parse(fileContents);
-      console.log(`[API] Successfully loaded company data`);
+      console.log(`[API] Successfully loaded company data with ${Object.keys(data).length} industries`);
       
       // Return the data with no-cache headers
       return NextResponse.json(data, {
