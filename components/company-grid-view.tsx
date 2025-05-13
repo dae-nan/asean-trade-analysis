@@ -64,14 +64,21 @@ export function CompanyGridView({ className }: CompanyGridViewProps) {
           impact: company.impact,
           marketCap: company.marketCap,
           revenue: company.revenue,
-          employeeCount: company.employeeCount,
+          freeCash: company.freeCash,
           mainMarkets: company.mainMarkets,
         }));
     })
   );
 
+  // Deduplicate companies by name (keep only the last one of each name)
+  const companyNameMap = new Map();
+  companiesForDisplay.forEach(company => {
+    companyNameMap.set(company.name.toLowerCase(), company);
+  });
+  const deduplicatedCompanies = Array.from(companyNameMap.values());
+
   // No more fallback to mock data
-  const displayData = companiesForDisplay;
+  const displayData = deduplicatedCompanies;
 
   const getImpactClass = (impact: number) => {
     if (impact <= -15) return "text-red-600 font-semibold"
@@ -118,7 +125,7 @@ export function CompanyGridView({ className }: CompanyGridViewProps) {
                 <TableHead>Industry</TableHead>
                 <TableHead className="text-right">Market Cap ($B)</TableHead>
                 <TableHead className="text-right">Revenue ($B)</TableHead>
-                <TableHead className="text-right">Employees</TableHead>
+                <TableHead className="text-right">Free Cash</TableHead>
                 <TableHead className="text-right">Tariff Impact (%)</TableHead>
                 <TableHead>Main Markets</TableHead>
               </TableRow>
@@ -134,11 +141,11 @@ export function CompanyGridView({ className }: CompanyGridViewProps) {
                   <TableCell>{company.industry}</TableCell>
                   <TableCell className="text-right">{company.marketCap}</TableCell>
                   <TableCell className="text-right">{company.revenue}</TableCell>
-                  <TableCell className="text-right">{company.employeeCount.toLocaleString()}</TableCell>
+                  <TableCell className="text-right">{company.freeCash ? company.freeCash.toLocaleString() : '0'}</TableCell>
                   <TableCell className={`text-right ${getImpactClass(company.impact)}`}>{company.impact}%</TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {company.mainMarkets.map((market) => (
+                      {company.mainMarkets.map((market: string) => (
                         <Badge
                           key={market}
                           variant="outline"
