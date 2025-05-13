@@ -9,7 +9,7 @@ interface Company {
   impact: number
   marketCap: number
   revenue: number
-  employeeCount: number
+  freeCash: number
   mainMarkets: string[]
 }
 

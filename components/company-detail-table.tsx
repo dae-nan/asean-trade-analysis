@@ -8,7 +8,7 @@ interface Company {
   impact: number
   marketCap: number
   revenue: number
-  employeeCount: number
+  freeCash: number
   mainMarkets: string[]
 }
 
@@ -32,7 +32,7 @@ export function CompanyDetailTable({ companies }: CompanyDetailTableProps) {
             <TableHead>Company</TableHead>
             <TableHead className="text-right">Market Cap ($B)</TableHead>
             <TableHead className="text-right">Revenue ($B)</TableHead>
-            <TableHead className="text-right">Employees</TableHead>
+            <TableHead className="text-right">Free Cash</TableHead>
             <TableHead className="text-right">Tariff Impact (%)</TableHead>
             <TableHead>Main Markets</TableHead>
           </TableRow>
@@ -43,7 +43,7 @@ export function CompanyDetailTable({ companies }: CompanyDetailTableProps) {
               <TableCell className="font-medium">{company.name}</TableCell>
               <TableCell className="text-right">{company.marketCap}</TableCell>
               <TableCell className="text-right">{company.revenue}</TableCell>
-              <TableCell className="text-right">{company.employeeCount.toLocaleString()}</TableCell>
+              <TableCell className="text-right">{company.freeCash ? company.freeCash.toLocaleString() : '0'}</TableCell>
               <TableCell className={`text-right ${getImpactClass(company.impact)}`}>{company.impact}%</TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-1">
